@@ -11,14 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LogoutController {
 
-    // если метод нормально отработает, то разобраться в его логике
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response,
-                    authentication);
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
         return "redirect:/login";
     }

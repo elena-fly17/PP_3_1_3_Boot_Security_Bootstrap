@@ -19,25 +19,20 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    // ВОЗМОЖНО, ВО ВЬЮ НУЖНО ИЗМЕНИТЬ УРЛЫ - ДОПИСАТЬ ПРИСТВКУ АДМИН В НАЧАЛЕ
 
-    // внедрение зависимости, как у гикбрейнс - через сеттер
-    // сначала было через поле с @Autowired, идея предлагала через конструктор
     private UserServiceImpl userServiceImpl;
+
     @Autowired
     public void setUserServiceImpl(UserServiceImpl userServiceImpl) {
         this.userServiceImpl = userServiceImpl;
     }
 
-
-    // ДОБАВЛЕНО НОВОЕ СЕГОДНЯ
     private RoleRepository roleRepository;
+
     @Autowired
     public void setRoleRepository(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
-
-
 
     @GetMapping("/list")
     public String listUsers(Model model) {
@@ -45,17 +40,6 @@ public class AdminController {
         return "list_of_users";
     }
 
-
-
-
-
-    // МРАБОТАЮЩИЙ МЕТОД ДО ЧЕКБОКСОВ
-    /*@GetMapping("/showForm")
-    public String showFormForAdd(Model model) {
-        model.addAttribute("user", new User());
-        return "form_for_user";
-    }*/
-    // МЕТОД ДЛЯ ЧЕКБОКСОВ
     @GetMapping("/showForm")
     public ModelAndView showFormforAdd() {
         User user = new User();
@@ -66,83 +50,12 @@ public class AdminController {
         return mav;
     }
 
-
-
-
-
-
-    /*// НОВАЯ ИЗМЕНЕННАЯ ВЕРСИЯ - МОЙ СОБСТВЕННЫЙ ВАРИАНТ - ПОТОМ ЕГО ОПРОБОВАТЬ
-    @GetMapping("/showForm")
-    public String showFormForAdd(Model model) {
-        User user = new User();
-        List<Role> roles = (List<Role>) roleRepository.findAll();
-        user.setRoles(roles);
-        model.addAttribute("user", user);
-        return "form_for_user";
-    }*/
-    /*// ВАРИАНТ ПО ТУТОРИАЛУ
-    @GetMapping("/showForm")
-    public ModelAndView showFormForAdd() {
-        User user = new User();
-        ModelAndView mav = new ModelAndView("form_for_user");
-        mav.addObject("user", user);
-        List<Role> roles = (List<Role>) roleRepository.findAll();
-        mav.addObject("allRoles", roles);
-        return mav;
-    }*/
-
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("user") User user) {
         userServiceImpl.saveUser(user);
         return "redirect:/admin/list";
     }
 
-    /*@GetMapping("/updateForm/{id}")
-    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) {
-        model.addAttribute("user", userServiceImpl.getUser(id));
-        //return "form_for_user";
-        return "form_for_update_user";
-    }
-    @GetMapping("/updateUser")
-    public String updateUser(@ModelAttribute("user") User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userServiceImpl.saveUser(user);
-        return "redirect:/admin/list";
-    }*/
-
-
-    // НОВАЯ ИЗМЕНЕННАЯ ВЕРСИЯ - МОЙ СОБСТВЕННЫЙ ВАРИАНТ - ПОТОМ ЕГО ОПРОБОВАТЬ
-    /*@GetMapping("/updateForm/{id}")
-    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) {
-        User user = userServiceImpl.getUser(id);
-        List<Role> roles = (List<Role>) roleRepository.findAll();
-        user.setRoles(roles);
-        model.addAttribute("user", user);
-        return "form_for_user";
-    }*/
-    /*// МЕТОД ПО ТУТОРИАЛУ
-    @GetMapping("/updateForm/{id}")
-    public ModelAndView showFormForUpdate(@PathVariable(name = "id") Integer id) {
-        User user = userServiceImpl.getUser(id);
-        ModelAndView mav = new ModelAndView("form_for_user");
-        mav.addObject("user", user);
-        List<Role> roles = (List<Role>) roleRepository.findAll();
-        mav.addObject("allRoles", roles);
-        return mav;
-    }*/
-
-
-
-
-
-    // РАБОТАЮЩАЯ ВЕРСИЯ МЕТОДА - ДО ЧЕКБОКСА
-    /*@GetMapping("/showFormForUpdate/{id}")
-    public String showFormForUpdate(@PathVariable (value = "id") int id, Model model) {
-        User user = userServiceImpl.getUser(id);
-        model.addAttribute("user", user);
-        return "form_for_user";
-    }*/
-    // ВЕРСИЯ ДЛЯ ЧЕКБОКСА
     @GetMapping("/showFormForUpdate/{id}")
     public ModelAndView editUser(@PathVariable(name = "id") Integer id) {
         User user = userServiceImpl.getUser(id);
@@ -153,27 +66,15 @@ public class AdminController {
         return mav;
     }
 
-
-
-
-
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable (value = "id") int id) {
         userServiceImpl.deleteUser(id);
         return "redirect:/admin/list";
     }
 
-
-
-
-
-
     @GetMapping("/showUserInfo/{id}")
     public String showUserPage(@PathVariable (value = "id") int id, Model model) {
-        // userServiceImpl.getUser(id);
-        // return "redirect:/user/{id}";
-        User user = userServiceImpl.getUser(id);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userServiceImpl.getUser(id));
         return "specific_user";
     }
 }

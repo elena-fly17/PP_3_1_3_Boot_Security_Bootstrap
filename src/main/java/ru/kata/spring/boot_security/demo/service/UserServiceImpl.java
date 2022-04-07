@@ -3,30 +3,13 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
-import ru.kata.spring.boot_security.demo.repository.UserServiceRepository;
 import ru.kata.spring.boot_security.demo.repository.UserServiceRepositoryJPA;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserServiceRepository {
-    // РАЗНЫЕ ВАРИАНТЫ - СРЕДИ НИХ ЕСТЬ И СРАБОТАВШИЕ, И НЕСРАБОТАВШИЕ
-    // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    // это возможное дополнение к строке выше
-    /*private BCryptPasswordEncoder bCryptPasswordEncoder = passwordEncoder;
-    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }*/
-    /*@Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;*/
-
-
+public class UserServiceImpl {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -41,76 +24,23 @@ public class UserServiceImpl implements UserServiceRepository {
         return userServiceRepositoryJPA.findAll();
     }
 
-
-
-
-
-
-
-
-
-
-
-    // СТАРЫЙ РАБОТАЮЩИЙ МЕТОД - ДО ЧЕКБОКСА
-    /*public void saveUser(User user) {
-        // метод спринг-даты save сохранит в юзера все знач-я, введенные в форму
-        // id добавится сам
-        // поля name, surname, age, phone, email, username и password введем в форму
-        // ЕЩЕ ОДИН ВАРИАНТ МЕТОДА
-        //- Получите зашифрованный пароль.
-        //- Обновите сущность пользователя
-        //(в результате чего зашифрованный пароль будет зашифрован во второй раз).
-        //- Перепишите только пароль пользователя с зашифрованным паролем, полученным на шаг е 1
-        User timeUser = getUser(user.getId());
-        if (timeUser == null) { // если юзера нет в БД
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRoles(Collections.singleton((new Role(1, "ROLE_USER"))));
-            userServiceRepositoryJPA.save(user);
-        } else { // юзер есть в БД
-            // ДОПОЛНЕНИЕ
-            String passwordForm = user.getPassword();
-            String passwordBD = timeUser.getPassword();
-               if (passwordForm.equals(passwordBD)) {
-                   user.setRoles(Collections.singleton((new Role(1, "ROLE_USER"))));
-                   userServiceRepositoryJPA.save(user);
-                   user.setPassword(passwordBD);
-               } else {
-                   user.setPassword(passwordEncoder.encode(user.getPassword()));
-                   user.setRoles(Collections.singleton((new Role(1, "ROLE_USER"))));
-                   userServiceRepositoryJPA.save(user);
-               }
-            }
-    }*/
-    // НОВЫЙ МЕТОД - ДЛЯ ЧЕКБОКСА
     public void saveUser(User user) {
         User timeUser = getUser(user.getId());
-        if (timeUser == null) { // если юзера нет в БД
+        if (timeUser == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            //user.setRoles(Collections.singleton((new Role(1, "ROLE_USER"))));
             userServiceRepositoryJPA.save(user);
-        } else { // юзер есть в БД
-            // ДОПОЛНЕНИЕ
+        } else {
             String passwordForm = user.getPassword();
             String passwordBD = timeUser.getPassword();
             if (passwordForm.equals(passwordBD)) {
-                // user.setRoles(Collections.singleton((new Role(1, "ROLE_USER"))));
                 userServiceRepositoryJPA.save(user);
                 user.setPassword(passwordBD);
             } else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
-                // user.setRoles(Collections.singleton((new Role(1, "ROLE_USER"))));
                 userServiceRepositoryJPA.save(user);
             }
         }
     }
-
-
-
-
-
-
-
-
 
     public User getUser(int id) {
         Optional<User> userOptional = userServiceRepositoryJPA.findById(id);
@@ -120,12 +50,4 @@ public class UserServiceImpl implements UserServiceRepository {
     public void deleteUser(int id) {
         userServiceRepositoryJPA.deleteById(id);
     }
-
-
-
-
-
-
-
-
 }

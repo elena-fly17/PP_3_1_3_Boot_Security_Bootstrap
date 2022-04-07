@@ -1,20 +1,11 @@
 <!DOCTYPE html>
 
-<!--может, все-таки стоит убрать подключение таймлиф-секьюрити?..-->
-
-<!--я решила не отображать на странице юзера его юзернейм и пароль-->
-
-<!--если отображение будет некрасивым, то, может, подправить - напр., сдел. табл.-->
-
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head>
     <meta charset="UTF-8">
     <title>User</title>
 
-
-
-<!--ДОБАВЛЕНО ИЗ ДРУГОГО ВЬЮ-->
     <style>
         th {
             background: lightblue;
@@ -30,15 +21,6 @@
 </head>
 
 <body>
-
-<!--<p th:text="${user.getName()}">VALUE</p>
-<p th:text="${user.getSurname()}">VALUE</p>
-<p th:text="${user.getAge()}">VALUE</p>
-<p th:text="${user.getPhone()}">VALUE</p>
-<p th:text="${user.getEmail()}">VALUE</p>
-&lt;!&ndash;кнопка для выхода - кстати, у индуса во вью по-другому (ссылка на туториал ниже)&ndash;&gt;
-&lt;!&ndash;положение кнопки на стр. верно выбрано? вдруг она не вписывается в какие-то теги?&ndash;&gt;
-<a th:href="@{/logout}" class="btn btn-primary">Sign out</a>-->
 
 <div class="container my-2">
     <div style="text-align:center;">
@@ -66,10 +48,8 @@
     </tr>
     </tbody>
 </table>
+
 <a th:href="@{/logout}" class="btn btn-primary">Sign out</a>
 
-    <a th:href="@{/admin/list}">Back to list of users</a>
-
 </body>
-
 </html>
