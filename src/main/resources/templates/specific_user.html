@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<!--может, все-таки стоит убрать подключение таймлиф-секьюрити?..-->
+
+<!--я решила не отображать на странице юзера его юзернейм и пароль-->
+
+<!--если отображение будет некрасивым, то, может, подправить - напр., сдел. табл.-->
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+
+
+
+<!--ДОБАВЛЕНО ИЗ ДРУГОГО ВЬЮ-->
+    <style>
+        th {
+            background: lightblue;
+            color: black;
+            font-size: 1.1em;
+        }
+    </style>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+
+</head>
+
+<body>
+
+<!--<p th:text="${user.getName()}">VALUE</p>
+<p th:text="${user.getSurname()}">VALUE</p>
+<p th:text="${user.getAge()}">VALUE</p>
+<p th:text="${user.getPhone()}">VALUE</p>
+<p th:text="${user.getEmail()}">VALUE</p>
+&lt;!&ndash;кнопка для выхода - кстати, у индуса во вью по-другому (ссылка на туториал ниже)&ndash;&gt;
+&lt;!&ndash;положение кнопки на стр. верно выбрано? вдруг она не вписывается в какие-то теги?&ndash;&gt;
+<a th:href="@{/logout}" class="btn btn-primary">Sign out</a>-->
+
+<div class="container my-2">
+    <div style="text-align:center;">
+        <h1>Your data</h1>
+    </div>
+    <br>
+
+<table border="1" class = "table table-striped table-responsive-md">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Age</th>
+        <th>Phone</th>
+        <th>E-mail</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.surname}"></td>
+        <td th:text="${user.age}"></td>
+        <td th:text="${user.phone}"></td>
+        <td th:text="${user.email}"></td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/logout}" class="btn btn-primary">Sign out</a>
+
+</body>
+
+</html>
