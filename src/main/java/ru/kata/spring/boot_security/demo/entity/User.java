@@ -14,8 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,6 +42,15 @@ public class User implements UserDetails {
     // добавленная колонка - в предыдущ. задаче нет
     private String password;
 
+
+
+
+
+
+
+
+
+    /*// СТАРЫЙ РАБОТАЮЩИЙ ВАРИАНТ - ДО ЧЕКБОКСОВ
     // обратить внимание, как будет подгружаться список ролей для юзера -
     // нужно исп. аннотацию фейтч или трансакшион (видео гикбрейнс)
     // для аннотации мэни-ту-мэни потом можно поэксперементировать - добавить к ней
@@ -47,16 +58,36 @@ public class User implements UserDetails {
     // в БД название колонки в объединяющей табл. - roles_id, а здесь указано - role_id,
     // по идее таблицы долж. пересоздаться с нов. названиями, но вдруг этого не произойдет
     // @ManyToMany(cascade = CascadeType.ALL) // не уверена, что нужен каскад и этот его тип
-    /*@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.DETACH}) // а нужен ли каскад и конкретно detach?*/
-    @ManyToMany/*(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)*/ // В СКОБКАХ НОВОЕ СЕГОДНЯ
+    *//*@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.DETACH}) // а нужен ли каскад и конкретно detach?*//*
+    @ManyToMany*//*(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)*//* // В СКОБКАХ НОВОЕ СЕГОДНЯ
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Collection<Role> roles;
-    // private Collection<Role> roles = new HashSet<>(); // НОВЫЙ ВАРИАНТ СЕГОДНЯ
+    // private Collection<Role> roles = new HashSet<>(); // НОВЫЙ ВАРИАНТ СЕГОДНЯ*/
+
+    // НОВЫЙ ВАРИАНТ ДЛЯ ЧЕКБОКСОВ
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+    // также пришлось изменить гетеры и сетеры для этого поля (дальше в классе)
+
+
+
+
+
+
+
+
+
+
 
     // убрала полн. конструктор, оставила только пустой - в некотор. туториалах нет
     // конструкторов, а в некоторых есть и пустые, и заполненные наполовину или полностью
@@ -137,15 +168,27 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+
+
+
+
+    // ЭТО СТАРЫЕ ГЕТЕРЫ И СЕТЕРЫ, РАБОТАЮЩИЙ ВАРИАНТ - ДО ИЗМЕНЕНИЙ ПО ЧЕКБОКСАМ
     // эти гетер и сетер решила оставить - в принципе, не помешают
     // по сути, гетер дублирует метод getAuthorities
-    public Collection<Role> getRoles() {
+    /*public Collection<Role> getRoles() {
         return roles;
     }
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }*/
+    // ЭТО НОВЫЕ ГЕТЕРЫ И СЕТЕРЫ - ДЛЯ ЧЕКБОКСОВ
+    public Set<Role> getRoles() {
+        return roles;
     }
-
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+    // ОБРАТИ ВНИМАНИЕ - ВОЗМОЖНО И В МЕТОДЕ НИЖЕ НУЖНО ВНЕСТИ "КОЛЛЕКЦИОННЫЕ" ИЗМЕНЕНИЯ
     // здесь этот метод возвращает коллекцию ролей, а не разрешений, как ему вообще-то
     // положено - поэтому прямо в этом методе выполняем конвертацию
     // индус делает то же самое, только по-другому
@@ -155,6 +198,10 @@ public class User implements UserDetails {
                 .map(r -> new SimpleGrantedAuthority(r.getAuthority()))
                 .collect(Collectors.toList());
     }
+
+
+
+
 
     @Override
     public String getPassword() {

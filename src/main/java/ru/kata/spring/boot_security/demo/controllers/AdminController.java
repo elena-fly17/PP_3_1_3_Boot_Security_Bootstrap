@@ -45,12 +45,32 @@ public class AdminController {
         return "list_of_users";
     }
 
-    // ВОТ ТАКИМ БЫЛ ЭТОТ МЕТОД В РАБОТАЮЩЕЙ ВЕРСИИ
-    @GetMapping("/showForm")
+
+
+
+
+    // МРАБОТАЮЩИЙ МЕТОД ДО ЧЕКБОКСОВ
+    /*@GetMapping("/showForm")
     public String showFormForAdd(Model model) {
         model.addAttribute("user", new User());
         return "form_for_user";
+    }*/
+    // МЕТОД ДЛЯ ЧЕКБОКСОВ
+    @GetMapping("/showForm")
+    public ModelAndView showFormforAdd() {
+        User user = new User();
+        ModelAndView mav = new ModelAndView("form_for_user");
+        mav.addObject("user", user);
+        List<Role> roles = (List<Role>) roleRepository.findAll();
+        mav.addObject("allRoles", roles);
+        return mav;
     }
+
+
+
+
+
+
     /*// НОВАЯ ИЗМЕНЕННАЯ ВЕРСИЯ - МОЙ СОБСТВЕННЫЙ ВАРИАНТ - ПОТОМ ЕГО ОПРОБОВАТЬ
     @GetMapping("/showForm")
     public String showFormForAdd(Model model) {
@@ -111,11 +131,26 @@ public class AdminController {
         return mav;
     }*/
 
-    @GetMapping("/showFormForUpdate/{id}")
+
+
+
+
+    // РАБОТАЮЩАЯ ВЕРСИЯ МЕТОДА - ДО ЧЕКБОКСА
+    /*@GetMapping("/showFormForUpdate/{id}")
     public String showFormForUpdate(@PathVariable (value = "id") int id, Model model) {
         User user = userServiceImpl.getUser(id);
         model.addAttribute("user", user);
         return "form_for_user";
+    }*/
+    // ВЕРСИЯ ДЛЯ ЧЕКБОКСА
+    @GetMapping("/showFormForUpdate/{id}")
+    public ModelAndView editUser(@PathVariable(name = "id") Integer id) {
+        User user = userServiceImpl.getUser(id);
+        ModelAndView mav = new ModelAndView("form_for_user");
+        mav.addObject("user", user);
+        List<Role> roles = (List<Role>) roleRepository.findAll();
+        mav.addObject("allRoles", roles);
+        return mav;
     }
 
 
