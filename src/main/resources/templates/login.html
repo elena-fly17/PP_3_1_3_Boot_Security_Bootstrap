@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <title>Login</title>
+
+    <style>
+        .input-group-append {
+            margin-top: -8px;
+        }
+        .container1 {
+            width: 10.5cm;
+        }
+    </style>
+</head>
+
+<body>
+<div class="p-3 mb-2 bg-light text-dark vh-100">
+    <div class="container">
+        <br><br>
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm">
+                <div class="container1">
+                    <div class="container">
+                        <h2 class="text-left mb-4 font-weight-bold">Please sign in</h2>
+                        <form name="my_login_form" th:action="@{/login}" method="post">
+                            <div class="input-form-group">
+                                <input class="form-control form-control-lg" type="text" id="username" name="username" placeholder="Email address">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control form-control-lg" type="text" id="password" name="password" placeholder="Password">
+                            </div>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn w-100 btn-primary btn-lg">Sign up</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+</body>
+</html>

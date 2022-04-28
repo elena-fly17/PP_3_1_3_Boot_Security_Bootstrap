@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,29 +29,28 @@ public class User implements UserDetails {
     private String name;
     private String surname;
     private int age;
-    private String phone;
     private String email;
     private String username;
     private String password;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(int id, String name, String surname, int age, String phone,
+    public User(int id, String name, String surname, int age,
                 String email, String username, String password) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.age = age;
-        this.phone = phone;
         this.email = email;
         this.username = username;
         this.password = password;
@@ -88,14 +88,6 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -115,6 +107,7 @@ public class User implements UserDetails {
     public Set<Role> getRoles() {
         return roles;
     }
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
@@ -124,6 +117,13 @@ public class User implements UserDetails {
         return roles.stream()
                 .map(r -> new SimpleGrantedAuthority(r.getAuthority()))
                 .collect(Collectors.toList());
+    }
+
+    public String getStringRoles() {
+        return getRoles().stream()
+                .map(String::valueOf)
+                .map(x -> x.replace("ROLE_", ""))
+                .collect(Collectors.joining(" "));
     }
 
     @Override
@@ -154,5 +154,19 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

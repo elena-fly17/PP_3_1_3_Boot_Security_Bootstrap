@@ -22,6 +22,8 @@ public class UserController {
     @GetMapping("/{id}")
     public String showUserPage(Principal principal, Model model) {
         model.addAttribute("user", userRepository.findByUsername(principal.getName()));
-        return "specific_user";
+        model.addAttribute("user_on_navbar",
+                userRepository.findByUsername(principal.getName()));
+        return "user_page";
     }
 }
